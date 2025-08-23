@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_movlix/presentation/pages/detail_page/detail_page.dart';
-import 'package:flutter_movlix/presentation/pages/home/home_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_movlix/features/movie/presentation/pages/detail_page/detail_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/config/.env");
   runApp(const MyApp());
 }
 

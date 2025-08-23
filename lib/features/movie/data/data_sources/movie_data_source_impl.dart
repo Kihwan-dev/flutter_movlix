@@ -1,6 +1,6 @@
-import 'package:flutter_movlix/data/data_sources/movie_data_source.dart';
-import 'package:flutter_movlix/data/dtos/movie_detail_dto.dart';
-import 'package:flutter_movlix/data/dtos/movie_response_dto.dart';
+import 'package:flutter_movlix/features/movie/data/data_sources/movie_data_source.dart';
+import 'package:flutter_movlix/features/movie/data/dtos/movie_detail_dto.dart';
+import 'package:flutter_movlix/features/movie/data/dtos/movie_response_dto.dart';
 
 class MovieDataSourceImpl implements MovieDataSource {
   @override
