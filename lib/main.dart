@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movlix/presentation/pages/detail_page/detail_page.dart';
 import 'package:flutter_movlix/presentation/pages/home/home_page.dart';
 
 void main() {
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: DetailPage(),
+      // home: HomePage(),
     );
   }
 }
