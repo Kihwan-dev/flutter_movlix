@@ -6,7 +6,7 @@ class DioClient {
 
   static Dio _client = Dio(
     BaseOptions(
-      baseUrl: "https://api.themoviedb.org/3/movie/",
+      baseUrl: NetworkConfig.tmdbBaseUrl,
       validateStatus: (status) => true,
     ),
   )..interceptors.add(interceptor);

@@ -8,33 +8,35 @@ import 'package:flutter_movlix/features/movie/data/dtos/movie_response_dto.dart'
 import 'package:flutter_movlix/infrastructure/network/dio_client.dart';
 
 class MovieDataSourceImpl implements MovieDataSource {
-  MovieDataSourceImpl(this._assetBundle);
-  final AssetBundle _assetBundle;
-
-  Future<MovieResponseDto?> fetch(String endpoint) async {
-    final response = await DioClient.client.get(endpoint);
+  Future<MovieResponseDto?> fetch(String endpoint, {int? page}) async {
+    final queryParameters = <String, dynamic>{
+      'language': 'ko-KR',
+      'page': page ?? 1,
+    };
+    
+    final response = await DioClient.client.get(endpoint, queryParameters: queryParameters);
     final json = jsonDecode(response.toString());
     return MovieResponseDto.fromJson(json);
   }
 
   @override
-  Future<MovieResponseDto?> fetchNowPlayingMovies() async {
-    return fetch(ApiEndpoints.nowPlaying);
+  Future<MovieResponseDto?> fetchNowPlayingMovies({int? page}) async {
+    return fetch(ApiEndpoints.nowPlaying, page: page);
   }
 
   @override
-  Future<MovieResponseDto?> fetchPopularMovies() async {
-    return fetch(ApiEndpoints.popular);
+  Future<MovieResponseDto?> fetchPopularMovies({int? page}) async {
+    return fetch(ApiEndpoints.popular, page: page);
   }
 
   @override
-  Future<MovieResponseDto?> fetchTopRatedMovies() async {
-    return fetch(ApiEndpoints.topRated);
+  Future<MovieResponseDto?> fetchTopRatedMovies({int? page}) async {
+    return fetch(ApiEndpoints.topRated, page: page);
   }
 
   @override
-  Future<MovieResponseDto?> fetchUpcomingMovies() async {
-    return fetch(ApiEndpoints.upcoming);
+  Future<MovieResponseDto?> fetchUpcomingMovies({int? page}) async {
+    return fetch(ApiEndpoints.upcoming, page: page);
   }
 
   @override
