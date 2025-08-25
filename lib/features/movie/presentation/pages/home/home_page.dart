@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movlix/features/movie/presentation/pages/home/home_view_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -26,10 +28,13 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Container(
                     width: double.infinity,
-                    child: Image.network(
-                      "http://picsum.photos/200/300",
-                      fit: BoxFit.cover,
-                    ),
+                    child: Consumer(builder: (context, ref, child) {
+                      final state = ref.watch(homeViewModelProvider);
+                      return Image.network(
+                        state.topRatedMovies != null ? state.topRatedMovies![0].posterPath : "https://picsum.photos/200/300",
+                        fit: BoxFit.cover,
+                      );
+                    }),
                   ),
                 ),
                 SizedBox(height: 8),
@@ -51,10 +56,13 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          "http://picsum.photos/200/300",
-                          fit: BoxFit.cover,
-                        ),
+                        child: Consumer(builder: (context, ref, child) {
+                          final state = ref.watch(homeViewModelProvider);
+                          return Image.network(
+                            state.nowPlayingMovies![index].posterPath,
+                            fit: BoxFit.cover,
+                          );
+                        }),
                       );
                     },
                   ),
@@ -62,6 +70,36 @@ class HomePage extends StatelessWidget {
                 SizedBox(height: 8),
                 Text(
                   "인기순",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Container(
+                  height: 180,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 10,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(width: 8);
+                    },
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Consumer(builder: (context, ref, child) {
+                          final state = ref.watch(homeViewModelProvider);
+                          return Image.network(
+                            state.popularMovies![index].posterPath,
+                            fit: BoxFit.cover,
+                          );
+                        }),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  "평점 높은순",
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -93,10 +131,13 @@ class HomePage extends StatelessWidget {
                                 alignment: Alignment.centerRight,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                    "http://picsum.photos/200/300",
-                                    fit: BoxFit.cover,
-                                  ),
+                                  child: Consumer(builder: (context, ref, child) {
+                                    final state = ref.watch(homeViewModelProvider);
+                                    return Image.network(
+                                      state.topRatedMovies![index].posterPath,
+                                      fit: BoxFit.cover,
+                                    );
+                                  }),
                                 ),
                               ),
                             ),
@@ -112,33 +153,6 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                           ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  "평점 높은순",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  height: 180,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: 8);
-                    },
-                    itemBuilder: (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          "http://picsum.photos/200/300",
-                          fit: BoxFit.cover,
                         ),
                       );
                     },
@@ -163,10 +177,13 @@ class HomePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          "http://picsum.photos/200/300",
-                          fit: BoxFit.cover,
-                        ),
+                        child: Consumer(builder: (context, ref, child) {
+                          final state = ref.watch(homeViewModelProvider);
+                          return Image.network(
+                            state.upComingMovies![index].posterPath,
+                            fit: BoxFit.cover,
+                          );
+                        }),
                       );
                     },
                   ),

@@ -18,9 +18,9 @@ void main() {
   );
 
   test(
-    "MovieRepositoryImpl test : fetchNowPlayingMovies",
+    "MovieRepositoryImpl test : fetchTopRatedMovies",
     () async {
-      when(() => mockMovieDataSource!.fetchNowPlayingMovies()).thenAnswer(
+      when(() => mockMovieDataSource!.fetchTopRatedMovies()).thenAnswer(
         (invocation) async => MovieResponseDto(
           page: 1,
           results: [
@@ -46,7 +46,7 @@ void main() {
         ),
       );
 
-      final result = await movieRepositoryImpl!.fetchNowPlayingMovies();
+      final result = await movieRepositoryImpl!.fetchTopRatedMovies();
       expect(result == null, false);
       expect(result!.length, 1);
       expect(result[0].id, 123);

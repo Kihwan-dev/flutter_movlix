@@ -1,4 +1,3 @@
-import 'package:flutter_movlix/features/movie/domain/usecases/fetch_now_playing_movies_usecase.dart';
 import 'package:flutter_movlix/features/movie/presentation/pages/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +20,11 @@ class HomeState {
 class HomeViewModel extends Notifier<HomeState> {
   @override
   HomeState build() {
+    fetchNowPlayingMovies();
+    fetchPopularMovies();
+    fetchTopRatedMovies();
+    fetchUpcomingMovies();
+
     return HomeState(
       nowPlayingMovies: null,
       popularMovies: null,
@@ -32,25 +36,45 @@ class HomeViewModel extends Notifier<HomeState> {
   Future<void> fetchNowPlayingMovies() async {
     final fetchNowPlayingMoviesUsecase = ref.read(fetchNowPlayingMoviesUsecaseProvider);
     final result = await fetchNowPlayingMoviesUsecase.execute();
-    state = HomeState(nowPlayingMovies: result);
+    state = HomeState(
+      nowPlayingMovies: result,
+      popularMovies: state.popularMovies,
+      topRatedMovies: state.topRatedMovies,
+      upComingMovies: state.upComingMovies,
+    );
   }
 
   Future<void> fetchPopularMovies() async {
     final fetchPopularMoviesUsecase = ref.read(fetchPopularMoviesUsecaseProvider);
     final result = await fetchPopularMoviesUsecase.execute();
-    state = HomeState(nowPlayingMovies: result);
+    state = HomeState(
+      nowPlayingMovies: state.nowPlayingMovies,
+      popularMovies: result,
+      topRatedMovies: state.topRatedMovies,
+      upComingMovies: state.upComingMovies,
+    );
   }
 
   Future<void> fetchTopRatedMovies() async {
     final fetchTopRatedMoviesUsecase = ref.read(fetchTopRatedMoviesUsecaseProvider);
     final result = await fetchTopRatedMoviesUsecase.execute();
-    state = HomeState(nowPlayingMovies: result);
+    state = HomeState(
+      nowPlayingMovies: state.nowPlayingMovies,
+      popularMovies: state.popularMovies,
+      topRatedMovies: result,
+      upComingMovies: state.upComingMovies,
+    );
   }
 
   Future<void> fetchUpcomingMovies() async {
     final fetchUpcomingMoviesUsecase = ref.read(fetchUpcomingMoviesUsecaseProvider);
     final result = await fetchUpcomingMoviesUsecase.execute();
-    state = HomeState(nowPlayingMovies: result);
+    state = HomeState(
+      nowPlayingMovies: state.nowPlayingMovies,
+      popularMovies: state.popularMovies,
+      topRatedMovies: state.topRatedMovies,
+      upComingMovies: result,
+    );
   }
 }
 

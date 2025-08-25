@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_movlix/features/movie/presentation/pages/detail_page/detail_page.dart';
+import 'package:flutter_movlix/features/movie/presentation/pages/home/home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/config/.env");
-  runApp(const MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,8 +17,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: DetailPage(),
-      // home: HomePage(),
+      // home: DetailPage(),
+      home: HomePage(),
     );
   }
 }
