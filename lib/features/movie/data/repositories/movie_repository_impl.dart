@@ -4,6 +4,8 @@ import 'package:flutter_movlix/features/movie/domain/entities/movie.dart';
 import 'package:flutter_movlix/features/movie/domain/entities/movie_detail.dart';
 import 'package:flutter_movlix/features/movie/domain/repositories/movie_repository.dart';
 
+/// dto -> entity로 변환하는 구현체
+
 class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl(this._movieDataSource);
 
