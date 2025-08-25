@@ -30,10 +30,12 @@ class HomePage extends StatelessWidget {
                     width: double.infinity,
                     child: Consumer(builder: (context, ref, child) {
                       final state = ref.watch(homeViewModelProvider);
-                      return Image.network(
-                        state.topRatedMovies != null ? state.topRatedMovies![0].posterPath : "https://picsum.photos/200/300",
-                        fit: BoxFit.cover,
-                      );
+                      return state.topRatedMovies == null
+                          ? Container()
+                          : Image.network(
+                              state.topRatedMovies![0].posterPath,
+                              fit: BoxFit.cover,
+                            );
                     }),
                   ),
                 ),
@@ -58,10 +60,12 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         child: Consumer(builder: (context, ref, child) {
                           final state = ref.watch(homeViewModelProvider);
-                          return Image.network(
-                            state.nowPlayingMovies![index].posterPath,
-                            fit: BoxFit.cover,
-                          );
+                          return state.nowPlayingMovies == null
+                              ? Container()
+                              : Image.network(
+                                  state.nowPlayingMovies![index].posterPath,
+                                  fit: BoxFit.cover,
+                                );
                         }),
                       );
                     },
@@ -88,10 +92,12 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         child: Consumer(builder: (context, ref, child) {
                           final state = ref.watch(homeViewModelProvider);
-                          return Image.network(
-                            state.popularMovies![index].posterPath,
-                            fit: BoxFit.cover,
-                          );
+                          return state.popularMovies == null
+                              ? Container()
+                              : Image.network(
+                                  state.popularMovies![index].posterPath,
+                                  fit: BoxFit.cover,
+                                );
                         }),
                       );
                     },
@@ -133,10 +139,12 @@ class HomePage extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(12),
                                   child: Consumer(builder: (context, ref, child) {
                                     final state = ref.watch(homeViewModelProvider);
-                                    return Image.network(
-                                      state.topRatedMovies![index].posterPath,
-                                      fit: BoxFit.cover,
-                                    );
+                                    return state.topRatedMovies == null
+                                        ? Container()
+                                        : Image.network(
+                                            state.topRatedMovies![index].posterPath,
+                                            fit: BoxFit.cover,
+                                          );
                                   }),
                                 ),
                               ),
@@ -179,10 +187,12 @@ class HomePage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                         child: Consumer(builder: (context, ref, child) {
                           final state = ref.watch(homeViewModelProvider);
-                          return Image.network(
-                            state.upComingMovies![index].posterPath,
-                            fit: BoxFit.cover,
-                          );
+                          return state.upComingMovies == null
+                              ? Container()
+                              : Image.network(
+                                  state.upComingMovies![index].posterPath,
+                                  fit: BoxFit.cover,
+                                );
                         }),
                       );
                     },

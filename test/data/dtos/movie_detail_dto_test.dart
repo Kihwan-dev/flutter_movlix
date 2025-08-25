@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter_movlix/features/movie/data/dtos/movie_detail_dto.dart';
-import 'package:flutter_movlix/features/movie/data/dtos/movie_response_dto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

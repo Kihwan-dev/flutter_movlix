@@ -14,7 +14,7 @@ class MovieRepositoryImpl implements MovieRepository {
   List<Movie>? getMovies(MovieResponseDto result) {
     return result.results
         .map(
-          (e) => Movie(id: e.id, posterPath: e.posterPath),
+          (e) => Movie(id: e.id, posterPath: "https://image.tmdb.org/t/p/original${e.posterPath}"),
         )
         .toList();
   }
