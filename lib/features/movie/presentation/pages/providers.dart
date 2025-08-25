@@ -25,7 +25,7 @@ final fetchNowPlayingMoviesUsecaseProvider = Provider(
   },
 );
 
-final fetchPopularUsecaseProvider = Provider(
+final fetchPopularMoviesUsecaseProvider = Provider(
   (ref) {
     final movieRepo = ref.read(_movieRepositoryProvider);
     return FetchPopularMoviesUsecase(movieRepo);
