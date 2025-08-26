@@ -17,7 +17,6 @@ class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121212),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -46,29 +45,24 @@ class DetailPage extends StatelessWidget {
                           Text(
                             state == null ? "" : state.title,
                             style: TextStyle(
-                              color: Colors.white,
                               fontSize: 20,
                             ),
                           ),
                           Text(
                             state == null ? "" : DateFormat("yyyy-MM-dd").format(state.releaseDate),
-                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       ),
                       SizedBox(height: 12),
                       Text(
                         state == null ? "" : state.tagline,
-                        style: TextStyle(color: Colors.white),
                       ),
                       Text(
                         state == null ? "" : "${state.runtime}분",
-                        style: TextStyle(color: Colors.white),
                       ),
                       Divider(
                         height: 20,
                         thickness: 2,
-                        color: Colors.grey[800],
                       ),
                       Container(
                         height: 40,
@@ -96,20 +90,16 @@ class DetailPage extends StatelessWidget {
                       Divider(
                         height: 20,
                         thickness: 2,
-                        color: Colors.grey[800],
                       ),
                       Text(
                         state == null ? "" : state.overview,
-                        style: TextStyle(color: Colors.white),
                       ),
                       Divider(
                         height: 20,
                         thickness: 2,
-                        color: Colors.grey[800],
                       ),
                       Text(
                         "흥행정보",
-                        style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(height: 16),
                       Container(
@@ -181,14 +171,8 @@ class DetailPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            value,
-            style: TextStyle(color: Colors.white),
-          ),
-          Text(
-            title,
-            style: TextStyle(color: Colors.white),
-          ),
+          Text(value),
+          Text(title),
         ],
       ),
     );

@@ -11,7 +11,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF121212),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -46,13 +45,9 @@ class HomePage extends StatelessWidget {
     required List<Movie>? movies,
   }) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          category,
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        Text(category),
         SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
@@ -66,7 +61,7 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("평점 높은순", style: TextStyle(color: Colors.white)),
+        Text("평점 높은순"),
         SizedBox(height: 8),
         Container(
           height: 180,
@@ -82,7 +77,6 @@ class HomePage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 80,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
                 ),
               );
               return GestureDetector(
@@ -111,7 +105,6 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 80,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -134,12 +127,7 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          category,
-          style: TextStyle(
-            color: Colors.white,
-          ),
-        ),
+        Text(category),
         SizedBox(height: 8),
         Container(
             height: 180,
