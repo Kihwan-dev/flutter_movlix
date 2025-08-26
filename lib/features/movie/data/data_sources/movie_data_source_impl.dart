@@ -14,7 +14,6 @@ class MovieDataSourceImpl implements MovieDataSource {
       "language": "ko-KR",
       "page": page ?? 1,
     };
-
     final response = await DioClient.client.get(endpoint, queryParameters: queryParameters);
     final json = jsonDecode(response.toString());
     return MovieResponseDto.fromJson(json);

@@ -5,5 +5,5 @@ class ApiEndpoints {
   static const upcoming = "movie/upcoming";
   static const search = "search/movie";
 
-  static String detail(int id) => "$id";
+  static String detail(int id) => "movie/$id";
 }

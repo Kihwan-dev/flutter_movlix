@@ -13,6 +13,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   late Debouncer _searchDebouncer;
+  final searchController = TextEditingController();
 
   @override
   void initState() {
@@ -20,9 +21,19 @@ class _HomePageState extends ConsumerState<HomePage> {
     _searchDebouncer = Debouncer(
       duration: Duration(milliseconds: 500),
       callback: () async {
-        // todo 검색
+        final state = ref.watch(homeViewModelProvider);
+        final viewModel = ref.read(homeViewModelProvider.notifier);
+        if (state.searchQuery.isNotEmpty) {
+          viewModel.searchMovies(state.searchQuery);
+        }
       },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.dispose();
   }
 
   @override
@@ -31,42 +42,92 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: SearchBar(
+          controller: searchController,
           leading: Icon(Icons.search),
-          onSubmitted: (query) {
-            // 검색 실행
+          onChanged: (value) {
+            final viewModel = ref.read(homeViewModelProvider.notifier);
+
+            if (value.trim().isEmpty) {
+              viewModel.clearSearch();
+              return;
+            }
+
+            viewModel.setSearchMode(true, value);
+
+            _searchDebouncer.run();
           },
+          trailing: [
+            if (ref.watch(homeViewModelProvider).isSearchMode)
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  ref.read(homeViewModelProvider.notifier).clearSearch();
+                  searchController.text = "";
+                },
+              ),
+          ],
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: onRefresh,
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
-                SizedBox(height: 8),
-                _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
-                SizedBox(height: 8),
-                NotificationListener(
-                  onNotification: (notification) {
-                    if (notification is ScrollUpdateNotification) {
-                      if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-                        fetchMore();
-                      }
+      body: state.isSearchMode
+          ? state.searchResults == null
+              ? Center(
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : state.searchResults!.isEmpty
+                  ? Center(
+                      child: Text("검색 결과가 없습니다."),
+                    )
+                  : _buildSearchScreen(state.searchResults!)
+          : _buildHomeScreen(context, state),
+    );
+  }
+
+  GridView _buildSearchScreen(List<Movie> movies) {
+    return GridView.builder(
+      padding: EdgeInsets.all(20),
+      itemCount: movies.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 2 / 3,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        return _buildMovieCard(context, "", movies[index]);
+      },
+    );
+  }
+
+  RefreshIndicator _buildHomeScreen(BuildContext context, HomeState state) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
+              SizedBox(height: 8),
+              _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
+              SizedBox(height: 8),
+              NotificationListener(
+                onNotification: (notification) {
+                  if (notification is ScrollUpdateNotification) {
+                    if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
+                      fetchMore();
                     }
-                    return false;
-                  },
-                  child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
-                ),
-                SizedBox(height: 8),
-                _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
-                SizedBox(height: 8),
-                _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
-              ],
-            ),
+                  }
+                  return false;
+                },
+                child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
+              ),
+              SizedBox(height: 8),
+              _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
+              SizedBox(height: 8),
+              _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
+            ],
           ),
         ),
       ),
@@ -78,7 +139,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     await viewModel.initialize();
   }
 
-  // todo delete
   Future<void> fetchMore() async {
     final viewModel = ref.read(homeViewModelProvider.notifier);
     await viewModel.fetchMoreMovies();
@@ -186,7 +246,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     required String category,
     required List<Movie>? movies,
   }) {
-    // if (movies != null) print("$category : ${movies.length}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -230,7 +289,17 @@ class _HomePageState extends ConsumerState<HomePage> {
         tag: "${tagHeader}_${movie.id}",
         child: CachedNetworkImage(
           imageUrl: movie.posterPath,
-          fit: BoxFit.fitWidth,
+          fit: BoxFit.fill,
+          placeholder: (context, url) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              child: const Center(
+                child: Icon(Icons.image, size: 100),
+              ),
+            );
+          },
         ),
       ),
     );

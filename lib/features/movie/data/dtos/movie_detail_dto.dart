@@ -1,5 +1,5 @@
 class MovieDetailDto {
-  bool adult;
+  bool? adult;
   String backdropPath;
   dynamic belongsToCollection;
   int budget;

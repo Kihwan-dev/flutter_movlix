@@ -40,7 +40,7 @@ class HomeState {
       topRatedMovies: topRatedMovies ?? this.topRatedMovies,
       upComingMovies: upComingMovies ?? this.upComingMovies,
       searchQuery: searchQuery ?? this.searchQuery,
-      searchResults: searchResults ?? this.searchResults,
+      searchResults: searchResults,
       isSearchMode: isSearchMode ?? this.isSearchMode,
       isSearching: isSearching ?? this.isSearching,
     );
@@ -102,13 +102,12 @@ class HomeViewModel extends Notifier<HomeState> {
     state = state.copyWith(popularMovies: state.popularMovies!..addAll(result ?? []));
   }
 
-  // 검색 실행 (디바운서 후 실행)
   Future<void> searchMovies(String query) async {
-    // 이미 검색 모드이므로 isSearching만 변경
-    state = state.copyWith(isSearching: true);
+    state = state.copyWith(isSearching: true, searchResults: null);
 
     try {
       final searchMoviesUsecase = ref.read(searchMoviesUsecaseProvider);
+      Future.delayed(Duration(seconds: 3));
       final results = await searchMoviesUsecase.execute(query);
       state = state.copyWith(
         searchResults: results,
@@ -122,7 +121,15 @@ class HomeViewModel extends Notifier<HomeState> {
     }
   }
 
-  // 검색 모드 해제
+  void setSearchMode(bool isSearchMode, String query) {
+    state = state.copyWith(
+      isSearchMode: isSearchMode,
+      searchQuery: query,
+      searchResults: null,
+      isSearching: false,
+    );
+  }
+
   void clearSearch() {
     state = state.copyWith(
       searchQuery: '',
