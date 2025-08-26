@@ -55,7 +55,8 @@ class MovieRepositoryImpl implements MovieRepository {
       budget: result.budget,
       genres: List.from(result.genres.map((e) => e.name)),
       id: id,
-      productionCompanyLogos: List.from(result.productionCompanies.map((e) => e.logoPath)),
+      productionCompanyLogos:
+          List.from(result.productionCompanies.map((e) => e.logoPath == null ? null : "https://image.tmdb.org/t/p/original${e.logoPath}")),
       overview: result.overview,
       popularity: result.popularity,
       releaseDate: result.releaseDate,

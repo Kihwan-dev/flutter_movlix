@@ -42,7 +42,7 @@ class MovieDataSourceImpl implements MovieDataSource {
 
   @override
   Future<MovieDetailDto?> fetchMovieDetail(int id) async {
-    final response = await DioClient.client.get(ApiEndpoints.detail(id));
+    final response = await DioClient.client.get(ApiEndpoints.detail(id), queryParameters: {'language': 'ko-KR'});
     final json = jsonDecode(response.toString());
     return MovieDetailDto.fromJson(json);
   }

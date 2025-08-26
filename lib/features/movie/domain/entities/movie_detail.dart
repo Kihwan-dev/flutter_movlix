@@ -9,7 +9,7 @@ class MovieDetail {
   final int id;
 
   /// 제작 회사 로고들의 리스트 (각 로고는 이미지 경로 또는 URL일 수 있음)
-  final List<String> productionCompanyLogos;
+  final List<String?> productionCompanyLogos;
 
   /// 영화에 대한 간략한 설명 (줄거리)
   final String overview;
