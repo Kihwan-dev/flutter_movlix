@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_movlix/features/movie/data/data_sources/movie_data_source.dart';
 import 'package:flutter_movlix/features/movie/data/dtos/movie_response_dto.dart';
 import 'package:flutter_movlix/features/movie/domain/entities/movie.dart';
@@ -14,7 +15,7 @@ class MovieRepositoryImpl implements MovieRepository {
   List<Movie>? getMovies(MovieResponseDto result) {
     return result.results
         .map(
-          (e) => Movie(id: e.id, posterPath: "https://image.tmdb.org/t/p/original${e.posterPath}"),
+          (e) => Movie(id: e.id, posterPath: "${dotenv.env["TMDB_IMG_BASE_URL"]}${e.posterPath}"),
         )
         .toList();
   }
@@ -63,7 +64,7 @@ class MovieRepositoryImpl implements MovieRepository {
       genres: List.from(result.genres.map((e) => e.name)),
       id: id,
       productionCompanyLogos:
-          List.from(result.productionCompanies.map((e) => e.logoPath == null ? null : "https://image.tmdb.org/t/p/w200${e.logoPath}")),
+          List.from(result.productionCompanies.map((e) => e.logoPath == null ? null : "${dotenv.env["TMDB_IMG_BASE_URL"]}${e.logoPath}")),
       overview: result.overview,
       popularity: result.popularity,
       releaseDate: result.releaseDate,

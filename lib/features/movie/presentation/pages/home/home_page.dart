@@ -74,9 +74,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       children: [
         Text(category),
         SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: movies == null ? Container() : _buildMovieCard(context, category, movies[0]),
+        Container(
+          width: double.infinity,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: movies == null ? Container() : _buildMovieCard(context, category, movies[0]),
+          ),
         ),
       ],
     );
@@ -207,7 +210,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         tag: "${tagHeader}_${movie.id}",
         child: CachedNetworkImage(
           imageUrl: movie.posterPath,
-          fit: BoxFit.cover,
+          fit: BoxFit.fitWidth,
         ),
       ),
     );
