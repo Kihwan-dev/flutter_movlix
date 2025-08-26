@@ -75,61 +75,31 @@ class HomeViewModel extends Notifier<HomeState> {
   Future<void> fetchNowPlayingMovies() async {
     final fetchNowPlayingMoviesUsecase = ref.read(fetchNowPlayingMoviesUsecaseProvider);
     final result = await fetchNowPlayingMoviesUsecase.execute();
-    state = HomeState(
-      isSearching: false,
-      nowPlayingMovies: result,
-      popularMovies: state.popularMovies,
-      topRatedMovies: state.topRatedMovies,
-      upComingMovies: state.upComingMovies,
-    );
+    state = state.copyWith(nowPlayingMovies: result);
   }
 
   Future<void> fetchPopularMovies() async {
     final fetchPopularMoviesUsecase = ref.read(fetchPopularMoviesUsecaseProvider);
     final result = await fetchPopularMoviesUsecase.execute();
-    state = HomeState(
-      isSearching: false,
-      nowPlayingMovies: state.nowPlayingMovies,
-      popularMovies: result,
-      topRatedMovies: state.topRatedMovies,
-      upComingMovies: state.upComingMovies,
-    );
+    state = state.copyWith(popularMovies: result);
   }
 
   Future<void> fetchTopRatedMovies() async {
     final fetchTopRatedMoviesUsecase = ref.read(fetchTopRatedMoviesUsecaseProvider);
     final result = await fetchTopRatedMoviesUsecase.execute();
-    state = HomeState(
-      isSearching: false,
-      nowPlayingMovies: state.nowPlayingMovies,
-      popularMovies: state.popularMovies,
-      topRatedMovies: result,
-      upComingMovies: state.upComingMovies,
-    );
+    state = state.copyWith(topRatedMovies: result);
   }
 
   Future<void> fetchUpcomingMovies() async {
     final fetchUpcomingMoviesUsecase = ref.read(fetchUpcomingMoviesUsecaseProvider);
     final result = await fetchUpcomingMoviesUsecase.execute();
-    state = HomeState(
-      isSearching: false,
-      nowPlayingMovies: state.nowPlayingMovies,
-      popularMovies: state.popularMovies,
-      topRatedMovies: state.topRatedMovies,
-      upComingMovies: result,
-    );
+    state = state.copyWith(upComingMovies: result);
   }
 
   Future<void> fetchMoreMovies() async {
     final fetchMorePopularMoviesUsecase = ref.read(fetchMorePopularMoviesUsecaseProvider);
     final result = await fetchMorePopularMoviesUsecase.execute(state.popularMovies!.length ~/ 20 + 1);
-    state = HomeState(
-      isSearching: false,
-      nowPlayingMovies: state.nowPlayingMovies,
-      popularMovies: state.popularMovies!..addAll(result ?? []),
-      topRatedMovies: state.topRatedMovies,
-      upComingMovies: state.upComingMovies,
-    );
+    state = state.copyWith(popularMovies: state.popularMovies!..addAll(result ?? []));
   }
 
   // 검색 실행 (디바운서 후 실행)
