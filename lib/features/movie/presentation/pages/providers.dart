@@ -2,6 +2,7 @@ import 'package:flutter_movlix/features/movie/data/data_sources/movie_data_sourc
 import 'package:flutter_movlix/features/movie/data/data_sources/movie_data_source_impl.dart';
 import 'package:flutter_movlix/features/movie/data/repositories/movie_repository_impl.dart';
 import 'package:flutter_movlix/features/movie/domain/repositories/movie_repository.dart';
+import 'package:flutter_movlix/features/movie/domain/usecases/fetch_more_popular_movies_usecase.dart';
 import 'package:flutter_movlix/features/movie/domain/usecases/fetch_movie_detail_usecase.dart';
 import 'package:flutter_movlix/features/movie/domain/usecases/fetch_now_playing_movies_usecase.dart';
 import 'package:flutter_movlix/features/movie/domain/usecases/fetch_popular_movies_usecase.dart';
@@ -50,5 +51,12 @@ final fetchMovieDetailUsecaseProvider = Provider(
   (ref) {
     final movieRepo = ref.read(_movieRepositoryProvider);
     return FetchMovieDetailUsecase(movieRepo);
+  },
+);
+
+final fetchMorePopularMoviesUsecaseProvider = Provider(
+  (ref) {
+    final movieRepo = ref.read(_movieRepositoryProvider);
+    return FetchMorePopularMoviesUsecase(movieRepo);
   },
 );

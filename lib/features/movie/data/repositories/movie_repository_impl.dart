@@ -48,6 +48,13 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
+  Future<List<Movie>?> fetchMorePopularMovies(int page) async {
+    final result = await _movieDataSource.fetchUpcomingMovies(page: page);
+    if (result == null) return [];
+    return getMovies(result);
+  }
+
+  @override
   Future<MovieDetail?> fetchMovieDetail(int id) async {
     final result = await _movieDataSource.fetchMovieDetail(id);
     if (result == null) return null;
@@ -56,7 +63,7 @@ class MovieRepositoryImpl implements MovieRepository {
       genres: List.from(result.genres.map((e) => e.name)),
       id: id,
       productionCompanyLogos:
-          List.from(result.productionCompanies.map((e) => e.logoPath == null ? null : "https://image.tmdb.org/t/p/original${e.logoPath}")),
+          List.from(result.productionCompanies.map((e) => e.logoPath == null ? null : "https://image.tmdb.org/t/p/w200${e.logoPath}")),
       overview: result.overview,
       popularity: result.popularity,
       releaseDate: result.releaseDate,

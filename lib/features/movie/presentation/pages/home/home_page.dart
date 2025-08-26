@@ -5,38 +5,63 @@ import 'package:flutter_movlix/features/movie/presentation/pages/detail_page/det
 import 'package:flutter_movlix/features/movie/presentation/pages/home/home_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends ConsumerStatefulWidget {
+  @override
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(homeViewModelProvider);
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            child: Consumer(builder: (context, ref, child) {
-              final state = ref.watch(homeViewModelProvider);
-              return Column(
+        child: RefreshIndicator(
+          onRefresh: onRefresh,
+          child: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              width: double.infinity,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
                   SizedBox(height: 8),
                   _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
                   SizedBox(height: 8),
-                  _buildMoviesSection(category: "인기순", movies: state.popularMovies),
+                  NotificationListener(
+                    onNotification: (notification) {
+                      if (notification is ScrollUpdateNotification) {
+                        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
+                          fetchMore();
+                        }
+                      }
+                      return false;
+                    },
+                    child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
+                  ),
                   SizedBox(height: 8),
-                  _buildTopRatedMoviesSection(state.topRatedMovies),
+                  _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
                   SizedBox(height: 8),
                   _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
                 ],
-              );
-            }),
+              ),
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> onRefresh() async {
+    final viewModel = ref.read(homeViewModelProvider.notifier);
+    await viewModel.initialize();
+  }
+
+  // todo delete
+  Future<void> fetchMore() async {
+    final viewModel = ref.read(homeViewModelProvider.notifier);
+    await viewModel.fetchMoreMovies();
   }
 
   Column _buildMostPopularMovie({
@@ -57,63 +82,78 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Column _buildTopRatedMoviesSection(List<Movie>? movies) {
+  Column _buildPopularMoviesSection({
+    required String category,
+    required List<Movie>? movies,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("평점 높은순"),
+        Text(category),
         SizedBox(height: 8),
         Container(
           height: 180,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: (movies ?? []).length,
-            separatorBuilder: (BuildContext context, int index) {
-              return SizedBox(width: 8);
-            },
-            itemBuilder: (context, index) {
-              final size = _measureTextSize(
-                "${index + 1}",
-                style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-              return GestureDetector(
-                child: Container(
-                  width: 120 + size.width / 2,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: movies == null
-                                ? Container()
-                                : CachedNetworkImage(
+          child: movies == null
+              ? Container()
+              : ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: movies.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(width: 8);
+                  },
+                  itemBuilder: (context, index) {
+                    final size = _measureTextSize(
+                      "${index + 1}",
+                      style: TextStyle(
+                        fontSize: 80,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                    final movie = movies[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPage(
+                              movie: movie,
+                              tagHeader: category,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 120 + size.width / 2,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: CachedNetworkImage(
                                     imageUrl: movies[index].posterPath,
                                     fit: BoxFit.cover,
                                   ),
-                          ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              child: Text(
+                                "${index + 1}",
+                                style: TextStyle(
+                                  fontSize: 80,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        child: Text(
-                          "${index + 1}",
-                          style: TextStyle(
-                            fontSize: 80,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
         ),
       ],
     );
@@ -123,7 +163,7 @@ class HomePage extends StatelessWidget {
     required String category,
     required List<Movie>? movies,
   }) {
-    if (movies != null) print("$category : ${movies.length}");
+    // if (movies != null) print("$category : ${movies.length}");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
