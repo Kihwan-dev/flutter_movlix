@@ -197,8 +197,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => DetailPage(
+                          PageRouteBuilder(
+                            transitionDuration: Duration(milliseconds: 500),
+                            pageBuilder: (_, __, ___) => DetailPage(
                               movie: movie,
                               tagHeader: category,
                             ),
@@ -214,9 +215,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 alignment: Alignment.centerRight,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: CachedNetworkImage(
-                                    imageUrl: movies[index].posterPath,
-                                    fit: BoxFit.cover,
+                                  child: Hero(
+                                    tag: "${category}_${movie.id}",
+                                    child: CachedNetworkImage(
+                                      imageUrl: movies[index].posterPath,
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -277,8 +281,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => DetailPage(
+          PageRouteBuilder(
+            transitionDuration: Duration(milliseconds: 300),
+            pageBuilder: (_, __, ___) => DetailPage(
               movie: movie,
               tagHeader: tagHeader,
             ),

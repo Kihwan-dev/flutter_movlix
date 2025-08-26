@@ -44,26 +44,15 @@ class DetailPage extends StatelessWidget {
                         children: [
                           Text(
                             state == null ? "" : state.title,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
+                            style: TextStyle(fontSize: 20),
                           ),
-                          Text(
-                            state == null ? "" : DateFormat("yyyy-MM-dd").format(state.releaseDate),
-                          ),
+                          Text(state == null ? "" : DateFormat("yyyy-MM-dd").format(state.releaseDate)),
                         ],
                       ),
                       SizedBox(height: 12),
-                      Text(
-                        state == null ? "" : state.tagline,
-                      ),
-                      Text(
-                        state == null ? "" : "${state.runtime}분",
-                      ),
-                      Divider(
-                        height: 20,
-                        thickness: 2,
-                      ),
+                      Text(state == null ? "" : state.tagline),
+                      Text(state == null ? "" : "${state.runtime}분"),
+                      Divider(height: 20, thickness: 2),
                       Container(
                         height: 40,
                         child: state == null
@@ -87,20 +76,10 @@ class DetailPage extends StatelessWidget {
                                 },
                               ),
                       ),
-                      Divider(
-                        height: 20,
-                        thickness: 2,
-                      ),
-                      Text(
-                        state == null ? "" : state.overview,
-                      ),
-                      Divider(
-                        height: 20,
-                        thickness: 2,
-                      ),
-                      Text(
-                        "흥행정보",
-                      ),
+                      Divider(height: 20, thickness: 2),
+                      Text(state == null ? "" : state.overview),
+                      Divider(height: 20, thickness: 2),
+                      Text("흥행정보"),
                       SizedBox(height: 16),
                       Container(
                         height: 70,
