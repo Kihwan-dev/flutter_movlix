@@ -11,8 +11,8 @@ import 'package:flutter_movlix/infrastructure/network/dio_client.dart';
 class MovieDataSourceImpl implements MovieDataSource {
   Future<MovieResponseDto?> fetch(String endpoint, {int? page}) async {
     final queryParameters = <String, dynamic>{
-      'language': 'ko-KR',
-      'page': page ?? 1,
+      "language": "ko-KR",
+      "page": page ?? 1,
     };
 
     final response = await DioClient.client.get(endpoint, queryParameters: queryParameters);
@@ -41,8 +41,18 @@ class MovieDataSourceImpl implements MovieDataSource {
   }
 
   @override
+  Future<MovieResponseDto?> searchMovies(String query) async {
+    final response = await DioClient.client.get(ApiEndpoints.search, queryParameters: {
+      "query": query,
+      "language": "ko-KR",
+    });
+    final json = jsonDecode(response.toString());
+    return MovieResponseDto.fromJson(json);
+  }
+
+  @override
   Future<MovieDetailDto?> fetchMovieDetail(int id) async {
-    final response = await DioClient.client.get(ApiEndpoints.detail(id), queryParameters: {'language': 'ko-KR'});
+    final response = await DioClient.client.get(ApiEndpoints.detail(id), queryParameters: {"language": "ko-KR"});
     final json = jsonDecode(response.toString());
     return MovieDetailDto.fromJson(json);
   }

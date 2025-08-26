@@ -7,5 +7,6 @@ abstract interface class MovieRepository {
   Future<List<Movie>?> fetchTopRatedMovies();
   Future<List<Movie>?> fetchUpcomingMovies();
   Future<List<Movie>?> fetchMorePopularMovies(int page);
+  Future<List<Movie>?> searchMovies(String query);
   Future<MovieDetail?> fetchMovieDetail(int id);
 }

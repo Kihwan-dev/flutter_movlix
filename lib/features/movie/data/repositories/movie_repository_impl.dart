@@ -56,6 +56,13 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
+  Future<List<Movie>?> searchMovies(String query) async {
+    final result = await _movieDataSource.searchMovies(query);
+    if (result == null) return [];
+    return getMovies(result);
+  }
+
+  @override
   Future<MovieDetail?> fetchMovieDetail(int id) async {
     final result = await _movieDataSource.fetchMovieDetail(id);
     if (result == null) return null;

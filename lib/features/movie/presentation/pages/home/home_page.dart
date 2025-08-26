@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_movlix/core/utils/debouncer.dart';
 import 'package:flutter_movlix/features/movie/domain/entities/movie.dart';
 import 'package:flutter_movlix/features/movie/presentation/pages/detail_page/detail_page.dart';
 import 'package:flutter_movlix/features/movie/presentation/pages/home/home_view_model.dart';
@@ -11,41 +12,60 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  late Debouncer _searchDebouncer;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchDebouncer = Debouncer(
+      duration: Duration(milliseconds: 500),
+      callback: () async {
+        // todo 검색
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(homeViewModelProvider);
     return Scaffold(
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: onRefresh,
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
-                  SizedBox(height: 8),
-                  _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
-                  SizedBox(height: 8),
-                  NotificationListener(
-                    onNotification: (notification) {
-                      if (notification is ScrollUpdateNotification) {
-                        if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-                          fetchMore();
-                        }
+      appBar: AppBar(
+        title: SearchBar(
+          leading: Icon(Icons.search),
+          onSubmitted: (query) {
+            // 검색 실행
+          },
+        ),
+      ),
+      body: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
+                SizedBox(height: 8),
+                _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
+                SizedBox(height: 8),
+                NotificationListener(
+                  onNotification: (notification) {
+                    if (notification is ScrollUpdateNotification) {
+                      if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
+                        fetchMore();
                       }
-                      return false;
-                    },
-                    child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
-                  ),
-                  SizedBox(height: 8),
-                  _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
-                  SizedBox(height: 8),
-                  _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
-                ],
-              ),
+                    }
+                    return false;
+                  },
+                  child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
+                ),
+                SizedBox(height: 8),
+                _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
+                SizedBox(height: 8),
+                _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
+              ],
             ),
           ),
         ),

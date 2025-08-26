@@ -8,6 +8,7 @@ import 'package:flutter_movlix/features/movie/domain/usecases/fetch_now_playing_
 import 'package:flutter_movlix/features/movie/domain/usecases/fetch_popular_movies_usecase.dart';
 import 'package:flutter_movlix/features/movie/domain/usecases/fetch_top_rated_movies_usecase.dart';
 import 'package:flutter_movlix/features/movie/domain/usecases/fetch_upcoming_movies_usecase.dart';
+import 'package:flutter_movlix/features/movie/domain/usecases/search_movies_usecase.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final _movieDataSourceProvider = Provider<MovieDataSource>((ref) => MovieDataSourceImpl());
@@ -58,5 +59,12 @@ final fetchMorePopularMoviesUsecaseProvider = Provider(
   (ref) {
     final movieRepo = ref.read(_movieRepositoryProvider);
     return FetchMorePopularMoviesUsecase(movieRepo);
+  },
+);
+
+final searchMoviesUsecaseProvider = Provider(
+  (ref) {
+    final movieRepo = ref.read(_movieRepositoryProvider);
+    return SearchMoviesUsecase(movieRepo);
   },
 );
