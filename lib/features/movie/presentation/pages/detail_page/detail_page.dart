@@ -28,6 +28,16 @@ class DetailPage extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: movie.posterPath,
                     fit: BoxFit.fitWidth,
+                    placeholder: (context, url) {
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                        child: const Center(
+                          child: Icon(Icons.image, size: 100),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),

@@ -101,33 +101,35 @@ class _HomePageState extends ConsumerState<HomePage> {
   RefreshIndicator _buildHomeScreen(BuildContext context, HomeState state) {
     return RefreshIndicator(
       onRefresh: onRefresh,
-      child: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
-              SizedBox(height: 8),
-              _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
-              SizedBox(height: 8),
-              NotificationListener(
-                onNotification: (notification) {
-                  if (notification is ScrollUpdateNotification) {
-                    if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
-                      fetchMore();
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: SingleChildScrollView(
+          child: Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildMostPopularMovie(context: context, category: "가장 인기있는", movies: state.popularMovies),
+                SizedBox(height: 8),
+                _buildMoviesSection(category: "현재 상영중", movies: state.nowPlayingMovies),
+                SizedBox(height: 8),
+                NotificationListener(
+                  onNotification: (notification) {
+                    if (notification is ScrollUpdateNotification) {
+                      if (notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
+                        fetchMore();
+                      }
                     }
-                  }
-                  return false;
-                },
-                child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
-              ),
-              SizedBox(height: 8),
-              _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
-              SizedBox(height: 8),
-              _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
-            ],
+                    return false;
+                  },
+                  child: _buildPopularMoviesSection(category: "인기순", movies: state.popularMovies),
+                ),
+                SizedBox(height: 8),
+                _buildMoviesSection(category: "평점 높은순", movies: state.topRatedMovies),
+                SizedBox(height: 8),
+                _buildMoviesSection(category: "개봉예정", movies: state.upComingMovies),
+              ],
+            ),
           ),
         ),
       ),
@@ -220,6 +222,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                                     child: CachedNetworkImage(
                                       imageUrl: movies[index].posterPath,
                                       fit: BoxFit.fill,
+                                      placeholder: (context, url) {
+                                        return DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                          ),
+                                          child: const Center(
+                                            child: Icon(Icons.image, size: 100),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
